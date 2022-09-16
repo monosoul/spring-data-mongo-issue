@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 
@@ -33,6 +34,12 @@ class MongoDbConfig : AbstractMongoClientConfiguration() {
 
         return MongoClients.create(mongoClientSettings)
     }
+
+    override fun customConversions() = MongoCustomConversions(
+        listOf(
+            FieldTypeConverter()
+        )
+    )
 }
 
 @ConstructorBinding
