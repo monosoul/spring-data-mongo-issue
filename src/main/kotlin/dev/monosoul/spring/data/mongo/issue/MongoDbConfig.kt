@@ -9,7 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 
@@ -32,6 +35,14 @@ class MongoDbConfig : AbstractMongoClientConfiguration() {
             .build()
 
         return MongoClients.create(mongoClientSettings)
+    }
+
+    override fun mappingMongoConverter(
+        databaseFactory: MongoDatabaseFactory,
+        customConversions: MongoCustomConversions,
+        mappingContext: MongoMappingContext,
+    ) = super.mappingMongoConverter(databaseFactory, customConversions, mappingContext).apply {
+        setTypeMapper(ReflectiveMongoTypeMapper())
     }
 }
 
